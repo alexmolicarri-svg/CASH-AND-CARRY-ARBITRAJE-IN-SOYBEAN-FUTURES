@@ -4,8 +4,6 @@ ARBITRAJE CASH & CARRY EN FUTUROS AGRÍCOLAS (CBOT) — BACKTESTER HISTÓRICO
 Procesador por Lotes para Análisis Empírico Retrospectivo
 =============================================================================
 
-Autor       : Alex Molina Carrillo
-Afiliación  : International Business Economics, Universitat Pompeu Fabra
 Propósito   : Reconstrucción histórica del dataset de arbitraje Cash &
               Carry para el trabajo de investigación. Complementa al
               recolector en tiempo real (cash_carry_research.py) con un
