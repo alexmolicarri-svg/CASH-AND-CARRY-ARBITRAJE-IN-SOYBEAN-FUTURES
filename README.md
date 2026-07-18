@@ -1,6 +1,6 @@
 # Cash-and-Carry Arbitrage in Soybean Futures (CBOT)
 
-Python implementation used in the research paper *"Testing Cash-and-Carry Arbitrage in Soybeans Futures"*
+Python implementation used in the research paper *"Testing Cash-and-Carry Arbitrage in Agricultural Commodity Futures: The Case of Soybeans"* (Alex Molina Carrillo, International Business Economics, Universitat Pompeu Fabra).
 
 This repository contains the full data pipeline used to test the classical cost-of-carry model against real market data from Interactive Brokers (IBKR), estimate implied net carry via a calendar-spread method, and evaluate cash-and-carry arbitrage signals on CBOT soybean futures.
 
@@ -8,9 +8,8 @@ This repository contains the full data pipeline used to test the classical cost-
 
 | File | Purpose |
 |---|---|
-| `cash_carry_research.py` | Live monitoring daemon — connects to IBKR and logs real-time observations continuously (CSV output). |
-| `cash_carry_backtester.py` | Historical batch processor — downloads 6 months of daily BID_ASK data and exports a consolidated two-sheet Excel file (raw observations + summary statistics). Used to generate the results reported in the paper. |
-| `generate_figures.py` | Reads the Excel output of the backtester and produces the three figures used in the paper (price comparison, implied carry over time, signal distribution). Does not connect to IBKR. |
+| `cash_carry_backtester.py` | Historical batch processor — downloads 6 months of daily BID_ASK data from Interactive Brokers and exports a consolidated two-sheet Excel file (raw observations + summary statistics). This is the script used to generate all results reported in the paper (Section 5). |
+| `generate_figures.py` | Reads the Excel output of the backtester and produces the three figures used in the paper (price comparison, implied carry over time, signal distribution). Does not connect to IBKR — figures are always reproducible from the same input file. |
 
 ## Requirements
 
@@ -31,7 +30,7 @@ pip install ib_insync nest_asyncio numpy pandas requests yfinance openpyxl matpl
 | Paper trading | 7497 | 4002 |
 | Live account | 7496 | 4001 |
 
-The port is set in the `port` parameter of `BacktestConfig` / `ArbitrageResearchOrchestrator`, depending on the script.
+The port is set in the `port` parameter of `BacktestConfig`.
 
 ## Usage
 
@@ -53,14 +52,6 @@ python generate_figures.py path/to/cash_carry_backtest_<timestamp>.xlsx
 
 This script only reads the Excel file passed as an argument — it never connects to IBKR, and will always reproduce the same figures from the same input file, regardless of current market conditions.
 
-### 3. Live monitoring (optional, not used for the paper's dataset)
-
-```bash
-python cash_carry_research.py
-```
-
-Runs indefinitely, logging one observation per polling interval to a CSV file. Stop with `Ctrl+C`.
-
 ## Data notes
 
 - Market data is retrieved via `whatToShow="BID_ASK"` on IBKR's `reqHistoricalData`, preserving real bid/ask microstructure. If unavailable for a given contract, the backtester falls back to `TRADES` bars with a synthetic half-spread (documented per-row in the `spread_method_*` columns of the output).
@@ -69,7 +60,7 @@ Runs indefinitely, logging one observation per polling interval to a CSV file. S
 
 ## Market hours
 
-CBOT soybean futures are closed on weekends. Running the scripts outside market hours will not raise an error, but observations will be logged as `INCOMPLETE_DATA` (live daemon) due to an empty order book.
+CBOT soybean futures are closed on weekends. Running `cash_carry_backtester.py` outside market hours does not raise an error for historical data (past sessions are still returned), but running it on a contract-day with no trading activity may return incomplete or missing bars.
 
 ## Citation
 
