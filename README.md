@@ -1,6 +1,6 @@
 # Cash-and-Carry Arbitrage in Soybean Futures (CBOT)
 
-Python implementation used in the research paper *"Testing Cash-and-Carry Arbitrage in Agricultural Commodity Futures: The Case of Soybeans"* (Alex Molina Carrillo, International Business Economics, Universitat Pompeu Fabra).
+Python implementation used in the research paper *"Testing Cash-and-Carry Arbitrage Soybean Futures"*.
 
 This repository contains the full data pipeline used to test the classical cost-of-carry model against real market data from Interactive Brokers (IBKR), estimate implied net carry via a calendar-spread method, and evaluate cash-and-carry arbitrage signals on CBOT soybean futures.
 
